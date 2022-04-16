@@ -14,6 +14,7 @@ import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import CreatePost from "./pages/Post/CreatePost";
 
+
 function App() {
   const [user, setUser] = useState(undefined);
   const { auth } = useAuthentication();
