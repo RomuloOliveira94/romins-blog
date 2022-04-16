@@ -1,0 +1,17 @@
+.About{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.About p{
+    color: #aaa;
+    margin-bottom: 2em;
+}
+
+.About a{
+    display: block;
+    margin-top: 15px;
+    padding: 10px 15px;
+}
