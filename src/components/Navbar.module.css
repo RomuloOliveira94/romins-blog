@@ -5,10 +5,11 @@
     align-items: center;
     padding: 0.5em 2em;
     background-color: #642B73;
+    height: 10vh;
 }
 
 .brand{
-    font-size: 1.5em;
+    font-size: 2em;
     text-decoration: none;
 }
 

@@ -3,6 +3,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  width: 100vw;
 }
 
 input::placeholder, textarea::placeholder{
@@ -96,7 +98,7 @@ input, textarea{
 }
 
 .btn.btn-danger:hover{
-  background-color: #642B73#642B73;
+  background-color: #642B73;
 }
 
 button[disabled]{

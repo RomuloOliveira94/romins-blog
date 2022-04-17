@@ -1,6 +1,6 @@
 .footer{
     color: white;
-    height: 250px;
+    height: 12vh;
     display: flex;
     flex-direction: column;
     align-items: center;
