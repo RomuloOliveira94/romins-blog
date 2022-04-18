@@ -1,16 +1,14 @@
-body {
+html, body {
   background-color: #FFF0F3;
   padding: 0;
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  height: 100vh;
-  width: 100vw;
 }
 
 input::placeholder, textarea::placeholder{
   font-family: 'Montserrat', sans-serif;
   color: #aaa;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 input:focus, textarea:focus{
@@ -93,7 +91,7 @@ input, textarea{
   color: white;
 }
 
-.btn.btn.btn-outline:hover{
+.btn.btn-outline:hover{
   background-color: black;
 }
 
@@ -113,6 +111,16 @@ button[disabled]{
  border-radius: 5px;
 }
 
+.noposts {
+  text-align: center;
+}
 
+.noposts p{
+  margin-bottom: 1.5em;
+}
+
+.noposts a{
+  padding: 10px 25px;
+}
 
 

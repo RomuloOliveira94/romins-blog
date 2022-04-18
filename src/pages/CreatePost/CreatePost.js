@@ -1,29 +1,28 @@
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthValue } from "../../context/AuthContext";
+import { storage } from "../../firebase/config";
 import { useInsertDocument } from "../../hooks/useInsertDocuments";
 import styles from "./CreatePost.module.css";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [image, setImage] = useState("");
+  const [image] = useState("");
+  const [file, setFile] = useState("");
   const [tags, setTags] = useState([]);
   const [formError, setFormError] = useState("");
   const { user } = useAuthValue();
   const { insertDocument, response } = useInsertDocument("posts");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError("");
+    const storageRef = ref(storage, `/images/${Date.now()}${file.name}`);
 
-    //validate img url
-    try {
-      new URL(image);
-    } catch (e) {
-      setFormError("A imagem precisa ser uma url");
-    }
+    const uploadImage = uploadBytesResumable(storageRef, file);
     //criar array de tags
     const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
     //checar todos os valores
@@ -32,18 +31,34 @@ const CreatePost = () => {
     }
     if (formError) return;
 
-    insertDocument({
-      title,
-      image,
-      body,
-      tagsArray,
-      uid: user.uid,
-      createdBy: user.displayName,
-    });
+    uploadImage.on(
+      "state_changed",
+      (snapshot) => {
+        Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        getDownloadURL(uploadImage.snapshot.ref).then((url) => {
+          insertDocument({
+            title,
+            image: url,
+            body,
+            tagsArray,
+            uid: user.uid,
+            createdBy: user.displayName,
+          });
+        });
+      }
+    );
 
     //redirect to home page
-    navigate("/")
+    navigate("/");
   };
+
   return (
     <div className={styles.create_post}>
       <h2>Faça uma postagem</h2>
@@ -61,6 +76,16 @@ const CreatePost = () => {
           />
         </label>
         <label>
+          <span>Upload da imagem</span>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files[0])}
+            required
+          />
+
+          {/*
           <span>Url da imagem: </span>
           <input
             type="text"
@@ -69,7 +94,7 @@ const CreatePost = () => {
             value={image}
             required
             onChange={(e) => setImage(e.target.value)}
-          />
+  />*/}
         </label>
         <label>
           <span>Conteúdo: </span>

@@ -21,6 +21,7 @@
 .links_list{
     display: flex;
     list-style: none;
+    flex-wrap: wrap;
 }
 
 .links_list li a{
@@ -30,8 +31,39 @@
 
 .active {
     background-color: #FFF0F3;
-    border-radius: 10px;
+    border-radius: 2px;
     color: black;
 }
   
 
+@media screen and (max-width: 700px) {
+    .links_list li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+    .active {
+        background-color: none;
+        border-radius: 2px;
+        color: black;
+    }
+}
+
+@media screen and (max-width: 453px) {
+    .links_list li a{
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .links_list li a{
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .links_list li a{
+        font-size: 12px;
+    }
+}
