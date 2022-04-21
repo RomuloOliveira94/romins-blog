@@ -13,7 +13,6 @@ const Dashboard = () => {
   const uid = user.uid;
   const { documents: posts, loading } = useFetchDocuments("posts", null, uid);
   const { deleteDocument } = useDeleteDocument("posts");
-  
 
   return (
     <div className={styles.dashboard}>
@@ -48,7 +47,7 @@ const Dashboard = () => {
                     Editar
                   </Link>
                   <button
-                    onClick={() => deleteDocument(post.id)}
+                    onClick={() => deleteDocument(post.id, post.image)}
                     className="btn btn-outline btn-danger"
                   >
                     Excluir

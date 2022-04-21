@@ -22,6 +22,12 @@
     display: flex;
     list-style: none;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.links_list button{
+    color: crimson;
 }
 
 .links_list li a{
@@ -53,6 +59,9 @@
 @media screen and (max-width: 453px) {
     .links_list li a{
         font-size: 20px;
+    }
+    .links_list{
+        padding: 0;
     }
 }
 

@@ -21,7 +21,6 @@ const CreatePost = () => {
     e.preventDefault();
     setFormError("");
     const storageRef = ref(storage, `/images/${Date.now()}${file.name}`);
-
     const uploadImage = uploadBytesResumable(storageRef, file);
     //criar array de tags
     const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
@@ -54,6 +53,7 @@ const CreatePost = () => {
         });
       }
     );
+
 
     //redirect to home page
     navigate("/");

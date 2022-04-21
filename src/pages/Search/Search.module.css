@@ -3,10 +3,12 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .search_container h1{
     margin-bottom: 1em;
+    text-align: center;
 }
 
 .search_container p{

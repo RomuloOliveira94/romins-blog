@@ -1,6 +1,7 @@
 import { useState, useEffect, useReducer } from "react";
-import { db } from "../firebase/config";
+import { db, storage } from "../firebase/config";
 import { doc, deleteDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 
 const initialState = {
   loading: null,
@@ -30,12 +31,14 @@ export const useDeleteDocument = (docCollection) => {
     }
   };
 
-  const deleteDocument = async (id) => {
+  const deleteDocument = async (id, image) => {
     checkCancelledBeforeDispatch({
       type: "LOADING",
     });
     try {
       const deletedDocument = await deleteDoc(doc(db, docCollection, id));
+      const storageRef = ref(storage, image);
+      await deleteObject(storageRef);
       checkCancelledBeforeDispatch({
         type: "DELETED_DOC",
         payload: deletedDocument,

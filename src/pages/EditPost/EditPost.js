@@ -4,14 +4,15 @@ import { useAuthValue } from "../../context/AuthContext";
 import { useUpdateDocument } from "../../hooks/useUpdateDocument";
 import { useFetchDocument } from "../../hooks/useFetchDocument";
 import styles from "./EditPost.module.css";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../../firebase/config";
 
 const EditPost = () => {
   const { id } = useParams();
   const { document: post } = useFetchDocument("posts", id);
-
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [image, setImage] = useState("");
+  const [file, setFile] = useState("");
   const [tags, setTags] = useState([]);
   const [formError, setFormError] = useState("");
   const { user } = useAuthValue();
@@ -22,7 +23,6 @@ const EditPost = () => {
     if (post) {
       setTitle(post.title);
       setBody(post.body);
-      setImage(post.image);
       const textTags = post.tagsArray.join(", ");
       setTags(textTags);
     }
@@ -32,34 +32,58 @@ const EditPost = () => {
     e.preventDefault();
     setFormError("");
 
-    //validate img url
-    try {
-      new URL(image);
-    } catch (e) {
-      setFormError("A imagem precisa ser uma url");
-    }
-    //criar array de tags
     const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
-    //checar todos os valores
-    if (!title || !image || !tags || !body) {
-      setFormError("Por favor preencha todos os campos.");
+
+    if (file) {
+      const storageRef = ref(storage, `/images/${Date.now()}${file.name}`);
+      const uploadImage = uploadBytesResumable(storageRef, file);
+      uploadImage.on(
+        "state_changed",
+        (snapshot) => {
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {
+          getDownloadURL(uploadImage.snapshot.ref).then((url) => {
+            updateDocument(id, {
+              title,
+              image: url,
+              body,
+              tagsArray,
+              uid: user.uid,
+              createdBy: user.displayName,
+            });
+          });
+        }
+      );
+    } else {
+      const data = {
+        title,
+        body,
+        tagsArray,
+        uid: user.uid,
+        createdBy: user.displayName,
+      };
+
+      updateDocument(id, data);
     }
-    if (formError) return;
-
-    const data = {
-      title,
-      image,
-      body,
-      tagsArray,
-      uid: user.uid,
-      createdBy: user.displayName,
-    };
-
-    updateDocument(id, data);
 
     //redirect to home page
     navigate("/dashboard");
   };
+
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title);
+      setBody(post.body);
+      //setImage(file);
+      const textTags = post.tagsArray.join(", ");
+      setTags(textTags);
+    }
+  }, [post]);
+
   return (
     <div className={styles.edit_post}>
       {post && (
@@ -79,7 +103,14 @@ const EditPost = () => {
               />
             </label>
             <label>
-              <span>Url da imagem: </span>
+              <span>Upload da imagem</span>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              {/*<span>Url da imagem: </span>
               <input
                 type="text"
                 placeholder="Coloque aqui a url da imagem do seu post"
@@ -87,7 +118,7 @@ const EditPost = () => {
                 value={image}
                 required
                 onChange={(e) => setImage(e.target.value)}
-              />
+              />*/}
             </label>
             <label>
               <p className={styles.preview_title}>Imagem:</p>
