@@ -50,9 +50,19 @@
     color: black;
 }
 
-.post_row button, .post_row a{
+.post_row a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 5px;
     height: 30px;
     width: 100px;
     font-size: .7em;
+    margin-bottom: 10px;
+}
+
+.post_row button{
+    font-size: 0.7em;
+    width: 162px;
+    height:40px;
 }

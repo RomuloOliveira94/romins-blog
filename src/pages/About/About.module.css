@@ -6,8 +6,9 @@
 }
 
 .About p{
-    color: #aaa;
+    color: black;
     margin-bottom: 2em;
+    max-width: 960px;
 }
 
 .About a{
